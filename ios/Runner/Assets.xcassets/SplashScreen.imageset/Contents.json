@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "aviaroll-game-splash-screen-vertical-108_48nDh50gTlyNzAB4FefFBA_pM2zX8GLQFekFetvujCWpQ.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "aviaroll-game-splash-screen-vertical-108_48nDh50gTlyNzAB4FefFBA_pM2zX8GLQFekFetvujCWpQ@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "aviaroll-game-splash-screen-vertical-108_48nDh50gTlyNzAB4FefFBA_pM2zX8GLQFekFetvujCWpQ@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

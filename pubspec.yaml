@@ -1,0 +1,89 @@
+name: aviaroll_high
+description: "AviaRoll High - A thrilling aviation adventure game"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Core Icons
+  cupertino_icons: ^1.0.8
+
+  # Game Engine
+  flame: ^1.18.0
+  flame_audio: ^2.1.7
+  
+  # State Management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  
+  # Animations
+  flutter_animate: ^4.5.0
+  
+  # Audio
+  audioplayers: ^6.0.0
+  
+  # Sensors (Gyroscope for 3D effect)
+  sensors_plus: ^6.0.1
+  
+  # Local Storage (Offline only)
+  shared_preferences: ^2.2.3
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # WebView
+  flutter_inappwebview: ^6.0.0
+  
+  # Google Fonts (No custom fonts needed)
+  google_fonts: ^6.2.1
+  
+  # Utils
+  equatable: ^2.0.5
+  uuid: ^4.4.0
+  collection: ^1.18.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  
+  # Code Generation
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.9
+  hive_generator: ^2.0.1
+  
+  # Testing
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+
+  # Assets
+  assets:
+    # Images - Planes
+    - assets/images/planes/
+    
+    # Images - Obstacles
+    - assets/images/obstacles/
+    
+    # Images - Backgrounds
+    - assets/images/backgrounds/
+    
+    # Images - UI Elements
+    - assets/images/ui/
+    
+    # Images - Collectibles
+    - assets/images/collectibles/
+    
+    # Audio - Music
+    - assets/audio/music/
+    
+    # Audio - SFX
+    - assets/audio/sfx/
