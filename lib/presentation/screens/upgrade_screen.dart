@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../data/models/upgrade_data.dart';
 import '../../data/repositories/game_repository.dart';
 
@@ -89,53 +90,53 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
               children: [
                 // Header
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(ResponsiveUtils.getSafeHorizontalPadding(context)),
                   child: Row(
                     children: [
                       // Back button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          width: 60,
-                          height: 60,
+                          width: ResponsiveUtils.getResponsiveButtonWidth(context, 60),
+                          height: ResponsiveUtils.getResponsiveButtonHeight(context, 60),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/images/ui/button_normal.png'),
                               fit: BoxFit.fill,
                             ),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                            size: 24,
+                            size: ResponsiveUtils.getResponsiveIconSize(context, 24),
                           ),
                         ),
                       ),
                       
-                      const Spacer(),
-                      
-                      // Title
-                      Text(
-                        'UPGRADES',
-                        style: GoogleFonts.russoOne(
-                          fontSize: 32,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withOpacity(0.8),
-                              offset: const Offset(2, 2),
-                              blurRadius: 4,
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'UPGRADES',
+                            style: GoogleFonts.russoOne(
+                              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 32),
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.8),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
-                          ],
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                       
-                      const Spacer(),
-                      
                       // Air tokens display
                       Container(
-                        width: 140,
-                        height: 60,
+                        width: ResponsiveUtils.getResponsiveButtonWidth(context, 140),
+                        height: ResponsiveUtils.getResponsiveButtonHeight(context, 60),
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/images/ui/button_normal.png'),
@@ -145,24 +146,27 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.monetization_on,
                               color: Colors.amber,
-                              size: 20,
+                              size: ResponsiveUtils.getResponsiveIconSize(context, 20),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '$_airTokens',
-                              style: GoogleFonts.russoOne(
-                                fontSize: 16,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.8),
-                                    offset: const Offset(2, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
+                            SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+                            Flexible(
+                              child: Text(
+                                '$_airTokens',
+                                style: GoogleFonts.russoOne(
+                                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.8),
+                                      offset: const Offset(2, 2),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],

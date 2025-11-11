@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/game_constants.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../data/repositories/game_repository.dart';
 import 'game_screen.dart';
 
@@ -142,48 +143,51 @@ class _PlaneSelectionScreenState extends State<PlaneSelectionScreen> {
               children: [
                 // Header
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(ResponsiveUtils.getSafeHorizontalPadding(context)),
                   child: Row(
                     children: [
                       // Back button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          width: 60,
-                          height: 60,
+                          width: ResponsiveUtils.getResponsiveButtonWidth(context, 60),
+                          height: ResponsiveUtils.getResponsiveButtonHeight(context, 60),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/images/ui/button_normal.png'),
                               fit: BoxFit.fill,
                             ),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                            size: 28,
+                            size: ResponsiveUtils.getResponsiveIconSize(context, 28),
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      Text(
-                        'AIRCRAFT',
-                        style: GoogleFonts.russoOne(
-                          fontSize: 32,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withOpacity(0.8),
-                              offset: const Offset(2, 2),
-                              blurRadius: 4,
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'AIRCRAFT',
+                            style: GoogleFonts.russoOne(
+                              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 32),
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.8),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
-                          ],
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
-                      const Spacer(),
                       // Air Tokens display
                       Container(
-                        width: 140,
-                        height: 60,
+                        width: ResponsiveUtils.getResponsiveButtonWidth(context, 140),
+                        height: ResponsiveUtils.getResponsiveButtonHeight(context, 60),
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/images/ui/button_normal.png'),
@@ -193,24 +197,27 @@ class _PlaneSelectionScreenState extends State<PlaneSelectionScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.monetization_on,
                               color: Colors.amber,
-                              size: 20,
+                              size: ResponsiveUtils.getResponsiveIconSize(context, 20),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '$_airTokens',
-                              style: GoogleFonts.russoOne(
-                                fontSize: 16,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.8),
-                                    offset: const Offset(2, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
+                            SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+                            Flexible(
+                              child: Text(
+                                '$_airTokens',
+                                style: GoogleFonts.russoOne(
+                                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.8),
+                                      offset: const Offset(2, 2),
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
@@ -233,26 +240,34 @@ class _PlaneSelectionScreenState extends State<PlaneSelectionScreen> {
                           const SizedBox(height: 20),
                           
                           // Plane name - BIG at top
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 300),
-                            child: Text(
-                              _getPlaneName(_allPlanes[_currentIndex]),
-                              key: ValueKey(_currentIndex),
-                              style: GoogleFonts.russoOne(
-                                fontSize: 40,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.8),
-                                    offset: const Offset(3, 3),
-                                    blurRadius: 6,
-                                  ),
-                                ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ResponsiveUtils.getSafeHorizontalPadding(context),
+                            ),
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 300),
+                              child: Text(
+                                _getPlaneName(_allPlanes[_currentIndex]),
+                                key: ValueKey(_currentIndex),
+                                style: GoogleFonts.russoOne(
+                                  fontSize: ResponsiveUtils.getResponsiveFontSize(context, 40),
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black.withOpacity(0.8),
+                                      offset: const Offset(3, 3),
+                                      blurRadius: 6,
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
                             ),
                           ),
                           
-                          const SizedBox(height: 10),
+                          SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 10)),
                           
                           // PageView with planes - SWIPEABLE
                           Expanded(
@@ -297,7 +312,9 @@ class _PlaneSelectionScreenState extends State<PlaneSelectionScreen> {
                           Expanded(
                             flex: 3,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 30),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: ResponsiveUtils.getSafeHorizontalPadding(context),
+                              ),
                               child: Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
@@ -305,41 +322,48 @@ class _PlaneSelectionScreenState extends State<PlaneSelectionScreen> {
                                     fit: BoxFit.fill,
                                   ),
                                 ),
-                                padding: const EdgeInsets.all(24),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // Description
-                                    Text(
-                                      _getPlaneDescription(_allPlanes[_currentIndex]),
-                                      textAlign: TextAlign.center,
-                                      style: GoogleFonts.exo2(
-                                        fontSize: 14,
-                                        color: Colors.white,
-                                        height: 1.4,
+                                padding: EdgeInsets.all(ResponsiveUtils.getSafeHorizontalPadding(context)),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // Description
+                                      Text(
+                                        _getPlaneDescription(_allPlanes[_currentIndex]),
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.exo2(
+                                          fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
+                                          color: Colors.white,
+                                          height: 1.4,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
                                       ),
-                                    ),
-                                    
-                                    const SizedBox(height: 16),
-                                    
-                                    // Stats or unlock button - same height for both
-                                    SizedBox(
-                                      height: 90,
-                                      child: Center(
-                                        child: _unlockedPlanes.contains(_allPlanes[_currentIndex]) ||
-                                            _allPlanes[_currentIndex] == PlaneType.standard
-                                          ? _StatsDisplayHorizontal(type: _allPlanes[_currentIndex])
-                                          : _UnlockButton(
-                                              cost: _getUnlockCost(_allPlanes[_currentIndex]),
-                                              canAfford: _airTokens >= _getUnlockCost(_allPlanes[_currentIndex]),
-                                              onPressed: () => _unlockPlane(
-                                                _allPlanes[_currentIndex],
-                                                _getUnlockCost(_allPlanes[_currentIndex]),
+                                      
+                                      SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 16)),
+                                      
+                                      // Stats or unlock button - same height for both
+                                      ConstrainedBox(
+                                        constraints: BoxConstraints(
+                                          maxHeight: ResponsiveUtils.getResponsiveButtonHeight(context, 90),
+                                        ),
+                                        child: Center(
+                                          child: _unlockedPlanes.contains(_allPlanes[_currentIndex]) ||
+                                              _allPlanes[_currentIndex] == PlaneType.standard
+                                            ? _StatsDisplayHorizontal(type: _allPlanes[_currentIndex])
+                                            : _UnlockButton(
+                                                cost: _getUnlockCost(_allPlanes[_currentIndex]),
+                                                canAfford: _airTokens >= _getUnlockCost(_allPlanes[_currentIndex]),
+                                                onPressed: () => _unlockPlane(
+                                                  _allPlanes[_currentIndex],
+                                                  _getUnlockCost(_allPlanes[_currentIndex]),
+                                                ),
                                               ),
-                                            ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -374,7 +398,7 @@ class _PlaneSelectionScreenState extends State<PlaneSelectionScreen> {
               
               // Select Button
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(ResponsiveUtils.getSafeHorizontalPadding(context)),
                 child: _SelectButton(
                   isEnabled: _unlockedPlanes.contains(_allPlanes[_currentIndex]) ||
                       _allPlanes[_currentIndex] == PlaneType.standard,
@@ -448,14 +472,36 @@ class _StatsDisplayHorizontal extends StatelessWidget {
     final stats = GameConstants.planeStats[type.name]!;
     
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _StatColumn(label: 'SPEED', emoji: '⚡', value: stats['speed']!),
-          _StatColumn(label: 'CONTROL', emoji: '🎮', value: stats['control']!),
-          _StatColumn(label: 'AGILITY', emoji: '✈️', value: stats['agility']!),
-        ],
+      padding: EdgeInsets.symmetric(
+        horizontal: ResponsiveUtils.getSafeHorizontalPadding(context) * 0.5,
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Make stats wrap on small screens
+          final useWrap = constraints.maxWidth < 300;
+          
+          if (useWrap) {
+            return Wrap(
+              alignment: WrapAlignment.center,
+              spacing: ResponsiveUtils.getResponsiveSpacing(context, 16),
+              runSpacing: ResponsiveUtils.getResponsiveSpacing(context, 12),
+              children: [
+                _StatColumn(label: 'SPEED', emoji: '⚡', value: stats['speed']!),
+                _StatColumn(label: 'CONTROL', emoji: '🎮', value: stats['control']!),
+                _StatColumn(label: 'AGILITY', emoji: '✈️', value: stats['agility']!),
+              ],
+            );
+          }
+          
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _StatColumn(label: 'SPEED', emoji: '⚡', value: stats['speed']!),
+              _StatColumn(label: 'CONTROL', emoji: '🎮', value: stats['control']!),
+              _StatColumn(label: 'AGILITY', emoji: '✈️', value: stats['agility']!),
+            ],
+          );
+        },
       ),
     );
   }
@@ -477,12 +523,15 @@ class _StatColumn extends StatelessWidget {
     final barCount = (value * 5).round(); // 0-5 bars
     
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           emoji,
-          style: const TextStyle(fontSize: 24),
+          style: TextStyle(
+            fontSize: ResponsiveUtils.getResponsiveFontSize(context, 24),
+          ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 4)),
         // Vertical bars
         Row(
           mainAxisSize: MainAxisSize.min,
@@ -491,8 +540,8 @@ class _StatColumn extends StatelessWidget {
             5,
             (index) => Container(
               margin: const EdgeInsets.symmetric(horizontal: 1),
-              width: 8,
-              height: 30,
+              width: ResponsiveUtils.isTablet(context) ? 6.0 : 8.0,
+              height: ResponsiveUtils.getResponsiveButtonHeight(context, 30),
               decoration: BoxDecoration(
                 color: index < barCount
                     ? AppColors.accentAmber
@@ -502,14 +551,16 @@ class _StatColumn extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 4)),
         Text(
           label,
           style: GoogleFonts.exo2(
-            fontSize: 10,
+            fontSize: ResponsiveUtils.getResponsiveFontSize(context, 10),
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
       ],
     );
@@ -542,8 +593,8 @@ class _SelectButtonState extends State<_SelectButton> {
       } : null,
       onTapCancel: () => setState(() => _isPressed = false),
       child: Container(
-        width: 250,
-        height: 120,
+        width: ResponsiveUtils.getResponsiveButtonWidth(context, 250),
+        height: ResponsiveUtils.getResponsiveButtonHeight(context, 120),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -566,7 +617,7 @@ class _SelectButtonState extends State<_SelectButton> {
           child: Text(
             'SELECT',
             style: GoogleFonts.russoOne(
-              fontSize: 24,
+              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 24),
               color: widget.isEnabled ? Colors.white : Colors.grey,
               shadows: [
                 Shadow(
@@ -576,6 +627,7 @@ class _SelectButtonState extends State<_SelectButton> {
                 ),
               ],
             ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
@@ -611,8 +663,8 @@ class _UnlockButtonState extends State<_UnlockButton> {
       } : null,
       onTapCancel: () => setState(() => _isPressed = false),
       child: Container(
-        width: 180,
-        height: 60,
+        width: ResponsiveUtils.getResponsiveButtonWidth(context, 180),
+        height: ResponsiveUtils.getResponsiveButtonHeight(context, 60),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -634,25 +686,29 @@ class _UnlockButtonState extends State<_UnlockButton> {
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.monetization_on,
                 color: Colors.amber,
-                size: 20,
+                size: ResponsiveUtils.getResponsiveIconSize(context, 20),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '${widget.cost}',
-                style: GoogleFonts.russoOne(
-                  fontSize: 18,
-                  color: widget.canAfford ? Colors.white : Colors.grey,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.8),
-                      offset: const Offset(2, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
+              SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+              Flexible(
+                child: Text(
+                  '${widget.cost}',
+                  style: GoogleFonts.russoOne(
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(context, 18),
+                    color: widget.canAfford ? Colors.white : Colors.grey,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.8),
+                        offset: const Offset(2, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

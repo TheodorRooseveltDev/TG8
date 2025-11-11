@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../data/repositories/game_repository.dart';
 import 'game_screen.dart';
 import 'upgrade_screen.dart';
@@ -35,6 +36,12 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get responsive values
+    final tokenWidth = ResponsiveUtils.getResponsiveButtonWidth(context, 140);
+    final tokenHeight = ResponsiveUtils.getResponsiveButtonHeight(context, 75);
+    final topPadding = ResponsiveUtils.getSafeVerticalPadding(context);
+    final sidePadding = ResponsiveUtils.getSafeHorizontalPadding(context);
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -54,11 +61,11 @@ class _MenuScreenState extends State<MenuScreen> {
               children: [
               // Air tokens display - top right
               Positioned(
-                top: 16,
-                right: 16,
+                top: topPadding,
+                right: sidePadding,
                 child: Container(
-                  width: 140,
-                  height: 75,
+                  width: tokenWidth,
+                  height: tokenHeight,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/ui/button_normal.png'),
@@ -68,24 +75,27 @@ class _MenuScreenState extends State<MenuScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.monetization_on,
                         color: Colors.amber,
-                        size: 20,
+                        size: ResponsiveUtils.getResponsiveIconSize(context, 20),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '$_airTokens',
-                        style: GoogleFonts.russoOne(
-                          fontSize: 16,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withOpacity(0.8),
-                              offset: const Offset(2, 2),
-                              blurRadius: 4,
-                            ),
-                          ],
+                      SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+                      Flexible(
+                        child: Text(
+                          '$_airTokens',
+                          style: GoogleFonts.russoOne(
+                            fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withOpacity(0.8),
+                                offset: const Offset(2, 2),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -93,136 +103,159 @@ class _MenuScreenState extends State<MenuScreen> {
                 ),
               ),
               // Main menu content
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Game title
-                    Text(
-                      'AVIAROLL',
-                      style: GoogleFonts.russoOne(
-                        fontSize: 48,
-                        color: AppColors.accentAmber,
-                        shadows: [
-                          const Shadow(
-                            color: Colors.black45,
-                            offset: Offset(4, 4),
-                            blurRadius: 8,
-                          ),
-                        ],
+              Positioned.fill(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(
+                    sidePadding,
+                    ResponsiveUtils.isTablet(context) 
+                        ? MediaQuery.of(context).size.height * 0.15  // 15% from top on iPad
+                        : MediaQuery.of(context).size.height * 0.2,  // 20% from top on phones (centered)
+                    sidePadding,
+                    topPadding,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Game title
+                      Text(
+                        'AVIAROLL',
+                        style: GoogleFonts.russoOne(
+                          fontSize: ResponsiveUtils.getResponsiveFontSize(context, 48),
+                          color: AppColors.accentAmber,
+                          shadows: [
+                            const Shadow(
+                              color: Colors.black45,
+                              offset: Offset(4, 4),
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    Text(
-                      'HIGH',
-                      style: GoogleFonts.russoOne(
-                        fontSize: 56,
-                        color: Colors.white,
-                        shadows: [
-                          const Shadow(
-                            color: Colors.black45,
-                            offset: Offset(4, 4),
-                            blurRadius: 8,
-                          ),
-                        ],
+                      Text(
+                        'HIGH',
+                        style: GoogleFonts.russoOne(
+                          fontSize: ResponsiveUtils.getResponsiveFontSize(context, 56),
+                          color: Colors.white,
+                          shadows: [
+                            const Shadow(
+                              color: Colors.black45,
+                              offset: Offset(4, 4),
+                              blurRadius: 8,
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Soar to the Skies',
-                      style: GoogleFonts.exo2(
-                        fontSize: 24,
-                        color: AppColors.accentAmber.withOpacity(0.8),
-                        fontStyle: FontStyle.italic,
+                      SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+                      Text(
+                        'Soar to the Skies',
+                        style: GoogleFonts.exo2(
+                          fontSize: ResponsiveUtils.getResponsiveFontSize(context, 24),
+                          color: AppColors.accentAmber.withOpacity(0.8),
+                          fontStyle: FontStyle.italic,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    
-                    const SizedBox(height: 60),
-                    
-                    // Play button - Main CTA
-                    _MenuButton(
-                      label: 'PLAY',
-                      icon: Icons.play_arrow,
-                      onPressed: () async {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const GameScreen(),
-                          ),
-                        );
-                        // Reload tokens when returning from game
-                        _loadTokens();
-                      },
-                    ),
-                    
-                    const SizedBox(height: 40),
-                    
-                    // Secondary options in a row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Planes button
-                        _SmallMenuButton(
-                          label: 'PLANES',
-                          icon: Icons.flight,
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const PlaneSelectionScreen()),
-                            );
-                            _loadTokens();
-                          },
+                      
+                      SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 60)),
+                      
+                      // Play button - Main CTA
+                      _MenuButton(
+                        label: 'PLAY',
+                        icon: Icons.play_arrow,
+                        onPressed: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const GameScreen(),
+                            ),
+                          );
+                          // Reload tokens when returning from game
+                          _loadTokens();
+                        },
+                      ),
+                      
+                      SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 40)),
+                      
+                      // Secondary options in a row
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width - (sidePadding * 2),
                         ),
-                        
-                        const SizedBox(width: 12),
-                        
-                        // Upgrades button
-                        _SmallMenuButton(
-                          label: 'UPGRADES',
-                          icon: Icons.upgrade,
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const UpgradeScreen()),
-                            );
-                            _loadTokens();
-                          },
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: ResponsiveUtils.getResponsiveSpacing(context, 12),
+                          runSpacing: ResponsiveUtils.getResponsiveSpacing(context, 12),
+                          children: [
+                            // Planes button
+                            _SmallMenuButton(
+                              label: 'PLANES',
+                              icon: Icons.flight,
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const PlaneSelectionScreen()),
+                                );
+                                _loadTokens();
+                              },
+                            ),
+                            
+                            // Upgrades button
+                            _SmallMenuButton(
+                              label: 'UPGRADES',
+                              icon: Icons.upgrade,
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const UpgradeScreen()),
+                                );
+                                _loadTokens();
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    
-                    const SizedBox(height: 12),
-                    
-                    // Bottom options in a row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Settings button
-                        _SmallMenuButton(
-                          label: 'SETTINGS',
-                          icon: Icons.settings,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                            );
-                          },
+                      ),
+                      
+                      SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 12)),
+                      
+                      // Bottom options in a row
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width - (sidePadding * 2),
                         ),
-                        
-                        const SizedBox(width: 12),
-                        
-                        // Statistics button
-                        _SmallMenuButton(
-                          label: 'STATS',
-                          icon: Icons.bar_chart,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (_) => const StatisticsScreen()),
-                            );
-                          },
+                        child: Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: ResponsiveUtils.getResponsiveSpacing(context, 12),
+                          runSpacing: ResponsiveUtils.getResponsiveSpacing(context, 12),
+                          children: [
+                            // Settings button
+                            _SmallMenuButton(
+                              label: 'SETTINGS',
+                              icon: Icons.settings,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                                );
+                              },
+                            ),
+                            
+                            // Statistics button
+                            _SmallMenuButton(
+                              label: 'STATS',
+                              icon: Icons.bar_chart,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const StatisticsScreen()),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -254,6 +287,9 @@ class _MenuButtonState extends State<_MenuButton> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonWidth = ResponsiveUtils.getResponsiveButtonWidth(context, 280);
+    final buttonHeight = ResponsiveUtils.getResponsiveButtonHeight(context, 150);
+    
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) {
@@ -262,8 +298,8 @@ class _MenuButtonState extends State<_MenuButton> {
       },
       onTapCancel: () => setState(() => _isPressed = false),
       child: Container(
-        width: 280, // Same width for all buttons
-        height: 150, // Same height as money display
+        width: buttonWidth,
+        height: buttonHeight,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -277,25 +313,30 @@ class _MenuButtonState extends State<_MenuButton> {
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 widget.icon,
                 color: Colors.white,
-                size: 24,
+                size: ResponsiveUtils.getResponsiveIconSize(context, 24),
               ),
-              const SizedBox(width: 12),
-              Text(
-                widget.label,
-                style: GoogleFonts.russoOne(
-                  fontSize: 28,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.8),
-                      offset: const Offset(2, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
+              SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 12)),
+              Flexible(
+                child: Text(
+                  widget.label,
+                  style: GoogleFonts.russoOne(
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.8),
+                        offset: const Offset(2, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],
@@ -327,6 +368,14 @@ class _SmallMenuButtonState extends State<_SmallMenuButton> {
 
   @override
   Widget build(BuildContext context) {
+    // Make buttons smaller for smaller screens to prevent overflow
+    final screenWidth = MediaQuery.of(context).size.width;
+    final baseWidth = screenWidth < 375 ? 160.0 : 192.0;
+    final baseHeight = screenWidth < 375 ? 80.0 : 96.0;
+    
+    final buttonWidth = ResponsiveUtils.getResponsiveButtonWidth(context, baseWidth);
+    final buttonHeight = ResponsiveUtils.getResponsiveButtonHeight(context, baseHeight);
+    
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) {
@@ -335,8 +384,8 @@ class _SmallMenuButtonState extends State<_SmallMenuButton> {
       },
       onTapCancel: () => setState(() => _isPressed = false),
       child: Container(
-        width: 192, // 20% bigger (160 * 1.2)
-        height: 96, // 20% bigger (80 * 1.2)
+        width: buttonWidth,
+        height: buttonHeight,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -347,13 +396,15 @@ class _SmallMenuButtonState extends State<_SmallMenuButton> {
             fit: BoxFit.fill,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ResponsiveUtils.getSafeHorizontalPadding(context) * 0.25,
+            ),
+            child: Text(
               widget.label,
               style: GoogleFonts.russoOne(
-                fontSize: 14,
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
                 color: Colors.white,
                 shadows: [
                   Shadow(
@@ -363,8 +414,11 @@ class _SmallMenuButtonState extends State<_SmallMenuButton> {
                   ),
                 ],
               ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              maxLines: 1,
             ),
-          ],
+          ),
         ),
       ),
     );

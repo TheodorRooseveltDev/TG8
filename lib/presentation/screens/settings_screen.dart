@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/audio/audio_manager.dart';
+import '../../core/utils/responsive_utils.dart';
 import '../../data/repositories/game_repository.dart';
 import '../../data/models/user_profile.dart';
 import 'webview_screen.dart';
@@ -68,50 +69,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 // Header
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(ResponsiveUtils.getSafeHorizontalPadding(context)),
                   child: Row(
                     children: [
                       // Back button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          width: 60,
-                          height: 60,
+                          width: ResponsiveUtils.getResponsiveButtonWidth(context, 60),
+                          height: ResponsiveUtils.getResponsiveButtonHeight(context, 60),
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage('assets/images/ui/button_normal.png'),
                               fit: BoxFit.fill,
                             ),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                            size: 24,
+                            size: ResponsiveUtils.getResponsiveIconSize(context, 24),
                           ),
                         ),
                       ),
                       
-                      const Spacer(),
-                      
-                      // Title
-                      Text(
-                        'SETTINGS',
-                        style: GoogleFonts.russoOne(
-                          fontSize: 32,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withOpacity(0.8),
-                              offset: const Offset(2, 2),
-                              blurRadius: 4,
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'SETTINGS',
+                            style: GoogleFonts.russoOne(
+                              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 32),
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.8),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
-                          ],
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                       
-                      const Spacer(),
-                      
-                      const SizedBox(width: 60), // Balance back button
+                      SizedBox(width: ResponsiveUtils.getResponsiveButtonWidth(context, 60)), // Balance back button
                     ],
                   ),
                 ),
@@ -690,15 +691,23 @@ class _SettingRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: GoogleFonts.exo2(
-            fontSize: 15,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
+        Flexible(
+          flex: 3,
+          child: Text(
+            label,
+            style: GoogleFonts.exo2(
+              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 15),
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
-        child,
+        SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+        Flexible(
+          flex: 2,
+          child: child,
+        ),
       ],
     );
   }

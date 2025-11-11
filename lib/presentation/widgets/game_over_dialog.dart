@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/utils/responsive_utils.dart';
 
 class GameOverDialog extends StatelessWidget {
   final int score;
@@ -24,134 +25,162 @@ class GameOverDialog extends StatelessWidget {
     final collectibleTokens = airTokensEarned - distanceBonus;
     
     final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final sidePadding = ResponsiveUtils.getSafeHorizontalPadding(context);
     
     return Material(
       type: MaterialType.transparency,
-      child: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.98, // Nearly full width
-            height: screenHeight * 0.85, // 85% of screen height
-            constraints: const BoxConstraints(
-              maxWidth: 800, // Much bigger
-              maxHeight: 900,
-            ),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/ui/menu_background.png'),
-                fit: BoxFit.fill, // Fill to take full size
+      child: SizedBox.expand(
+        child: Container(
+          width: screenWidth,
+          height: screenHeight,
+          // Completely transparent - no background image
+          color: Colors.transparent,
+          padding: EdgeInsets.fromLTRB(
+            sidePadding * 1.5,
+            ResponsiveUtils.getSafeVerticalPadding(context) * 3,
+            sidePadding * 1.5,
+            ResponsiveUtils.getSafeVerticalPadding(context) * 2,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Title
+                  Text(
+                    'FLIGHT ENDED',
+                    style: GoogleFonts.russoOne(
+                      fontSize: ResponsiveUtils.getResponsiveFontSize(context, 28),
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  
+                  SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 16)),
+                  
+                  // Stats
+                  _StatRow(label: 'SCORE', value: score.toString()),
+                  _StatRow(label: 'DISTANCE', value: '${distance}m'),
+                  
+                  Divider(
+                    color: Colors.white24,
+                    thickness: 2,
+                    height: ResponsiveUtils.getResponsiveSpacing(context, 24),
+                  ),
+                  
+                  // Token breakdown - COMPACT
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: ResponsiveUtils.getResponsiveSpacing(context, 2),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'Collected',
+                            style: GoogleFonts.russoOne(
+                              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 12),
+                              color: Colors.white60,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                              size: ResponsiveUtils.getResponsiveIconSize(context, 14),
+                            ),
+                            SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 4)),
+                            Text(
+                              '+$collectibleTokens',
+                              style: GoogleFonts.russoOne(
+                                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: ResponsiveUtils.getResponsiveSpacing(context, 2),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'Distance',
+                            style: GoogleFonts.russoOne(
+                              fontSize: ResponsiveUtils.getResponsiveFontSize(context, 12),
+                              color: Colors.white60,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.flight,
+                              color: Colors.lightBlue,
+                              size: ResponsiveUtils.getResponsiveIconSize(context, 14),
+                            ),
+                            SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 4)),
+                            Text(
+                              '+$distanceBonus',
+                              style: GoogleFonts.russoOne(
+                                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  Divider(
+                    color: Colors.white24,
+                    thickness: 2,
+                    height: ResponsiveUtils.getResponsiveSpacing(context, 16),
+                  ),
+                  
+                  _StatRow(
+                    label: 'TOTAL EARNED',
+                    value: airTokensEarned.toString(),
+                    icon: Icons.monetization_on,
+                  ),
+                  
+                  SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 20)),
+                  
+                  // Buttons - COMPACT
+                  _GameOverButton(
+                    label: 'TRY AGAIN',
+                    icon: Icons.refresh,
+                    color: Colors.orange,
+                    onPressed: onRestart,
+                  ),
+                  
+                  SizedBox(height: ResponsiveUtils.getResponsiveSpacing(context, 6)),
+                  
+                  _GameOverButton(
+                    label: 'MAIN MENU',
+                    icon: Icons.home,
+                    color: Colors.blue,
+                    onPressed: onMainMenu,
+                  ),
+                ],
               ),
             ),
-            padding: const EdgeInsets.fromLTRB(100, 150, 100, 100), // Top padding 70px
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center, // Center content vertically
-              children: [
-                // Title
-                Text(
-                  'FLIGHT ENDED',
-                  style: GoogleFonts.russoOne(
-                    fontSize: 28,
-                    color: Colors.white,
-                  ),
-                ),
-                
-                const SizedBox(height: 16),
-                
-                // Stats
-                _StatRow(label: 'SCORE', value: score.toString()),
-                _StatRow(label: 'DISTANCE', value: '${distance}m'),
-                
-                const Divider(color: Colors.white24, thickness: 2, height: 24),
-                
-                // Token breakdown - COMPACT
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Collected',
-                        style: GoogleFonts.russoOne(
-                          fontSize: 12,
-                          color: Colors.white60,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 14),
-                          const SizedBox(width: 4),
-                          Text(
-                            '+$collectibleTokens',
-                            style: GoogleFonts.russoOne(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Distance',
-                        style: GoogleFonts.russoOne(
-                          fontSize: 12,
-                          color: Colors.white60,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          const Icon(Icons.flight, color: Colors.lightBlue, size: 14),
-                          const SizedBox(width: 4),
-                          Text(
-                            '+$distanceBonus',
-                            style: GoogleFonts.russoOne(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                
-                const Divider(color: Colors.white24, thickness: 2, height: 16),
-                
-                _StatRow(
-                  label: 'TOTAL EARNED',
-                  value: airTokensEarned.toString(),
-                  icon: Icons.monetization_on,
-                ),
-                
-                const SizedBox(height: 20), // Reduced spacing
-                
-                // Buttons - COMPACT
-                _GameOverButton(
-                  label: 'TRY AGAIN',
-                  icon: Icons.refresh,
-                  color: Colors.orange,
-                  onPressed: onRestart,
-                ),
-                
-                const SizedBox(height: 6), // Reduced spacing between buttons
-                
-                _GameOverButton(
-                  label: 'MAIN MENU',
-                  icon: Icons.home,
-                  color: Colors.blue,
-                  onPressed: onMainMenu,
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -172,32 +201,51 @@ class _StatRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(
+        vertical: ResponsiveUtils.getResponsiveSpacing(context, 8),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: GoogleFonts.russoOne(
-              fontSize: 16,
-              color: Colors.white70,
+          Flexible(
+            flex: 3,
+            child: Text(
+              label,
+              style: GoogleFonts.russoOne(
+                fontSize: ResponsiveUtils.getResponsiveFontSize(context, 16),
+                color: Colors.white70,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          Row(
-            children: [
-              if (icon != null) ...[
-                Icon(icon, color: Colors.white, size: 20),
-                const SizedBox(width: 8),
-              ],
-              Text(
-                value,
-                style: GoogleFonts.russoOne(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+          Flexible(
+            flex: 2,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (icon != null) ...[
+                  Icon(
+                    icon,
+                    color: Colors.white,
+                    size: ResponsiveUtils.getResponsiveIconSize(context, 20),
+                  ),
+                  SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 8)),
+                ],
+                Flexible(
+                  child: Text(
+                    value,
+                    style: GoogleFonts.russoOne(
+                      fontSize: ResponsiveUtils.getResponsiveFontSize(context, 22),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -235,8 +283,8 @@ class _GameOverButtonState extends State<_GameOverButton> {
       },
       onTapCancel: () => setState(() => _isPressed = false),
       child: Container(
-        width: 200, // Smaller button width
-        height: 70, // Smaller button height
+        width: ResponsiveUtils.getResponsiveButtonWidth(context, 200),
+        height: ResponsiveUtils.getResponsiveButtonHeight(context, 70),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
@@ -250,22 +298,30 @@ class _GameOverButtonState extends State<_GameOverButton> {
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(widget.icon, color: Colors.white, size: 20),
-              const SizedBox(width: 10),
-              Text(
-                widget.label,
-                style: GoogleFonts.exo2(
-                  fontSize: 14, // Smaller text
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black.withOpacity(0.8),
-                      offset: const Offset(2, 2),
-                      blurRadius: 4,
-                    ),
-                  ],
+              Icon(
+                widget.icon,
+                color: Colors.white,
+                size: ResponsiveUtils.getResponsiveIconSize(context, 20),
+              ),
+              SizedBox(width: ResponsiveUtils.getResponsiveSpacing(context, 10)),
+              Flexible(
+                child: Text(
+                  widget.label,
+                  style: GoogleFonts.exo2(
+                    fontSize: ResponsiveUtils.getResponsiveFontSize(context, 14),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.8),
+                        offset: const Offset(2, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
